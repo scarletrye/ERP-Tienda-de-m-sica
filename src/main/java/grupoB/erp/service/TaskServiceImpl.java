@@ -2,6 +2,8 @@ package grupoB.erp.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import grupoB.erp.domain.*;
 import java.util.List;
 
@@ -24,13 +26,19 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public Task findTaskById(Long id) {
-        return taskDAO.findById(id).orElse(null);
+    @Transactional(readOnly = true)
+    public Task findTaskById(String id) {
+        return taskDAO.findByName(id);
     }
 
     @Override
     public List<Task> getAllTasks() {
         return (List<Task>) taskDAO.findAll();
+    }
+
+    @Override
+    public void delete(Task task) {
+        taskDAO.delete(task);
     }
 }
 
