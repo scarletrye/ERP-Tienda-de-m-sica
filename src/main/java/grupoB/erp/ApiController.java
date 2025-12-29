@@ -275,4 +275,18 @@ public class ApiController {
         
         return ResponseEntity.ok("Added successfully");
     }
+
+    @DeleteMapping("/task/{id}/delete")
+    public ResponseEntity<String> deleteTask(@PathVariable String id) {
+        Task task = taskService.findTaskById(id);
+        if (task == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not Found: Resource not found");
+        try {
+            taskService.delete(task);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Internal Server Error: Could not delete the entity");
+        }
+        return ResponseEntity.ok("Deleted successfully");
+    }
 }

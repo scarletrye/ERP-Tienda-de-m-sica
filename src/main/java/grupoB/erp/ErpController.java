@@ -205,17 +205,12 @@ public class ErpController {
         return "calendar/taskList";
     }
 
-    /*
-     * @GetMapping("/calendar/task/{id}")
-    public ResponseEntity<Task> getTaskById(@PathVariable Long id) {
-        Task task = taskService.findTaskById(id);
-        
-        if(task != null) {
-            return ResponseEntity.ok(task);
-        }else{
-            return ResponseEntity.notFound().build();
-        }
-    }
-     */
     
+    @GetMapping("/calendar/{id}")
+    public String task(@PathVariable String id, Model model) {
+        Task task = taskService.findTaskById(id);
+        model.addAttribute("data", task);
+        model.addAttribute("user", userContext.getCurrentUser());
+        return "calendar/[id]/index";
+    }
 }

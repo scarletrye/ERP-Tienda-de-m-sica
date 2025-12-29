@@ -4,8 +4,8 @@ import grupoB.erp.domain.Task;
 import java.util.*;
 
 public interface TaskService {
-    Task findTaskById(Long id);
-    Task saveTask(Task task);
-    List<Task> getAllTasks();
+    public List<Task> getAllTasks();
+    public Task findTaskById(String id);
+    public Task saveTask(Task task);
     public void delete(Task task);
 }

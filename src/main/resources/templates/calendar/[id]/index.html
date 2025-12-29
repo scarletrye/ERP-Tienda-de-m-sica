@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/erpForm}">
+
+<head>
+    <title th:text="${data.name + ' - Overview'}" />
+    <script th:src="@{/js/delete.js}" defer></script>
+    <script th:inline="javascript">
+        document.addEventListener("DOMContentLoaded", () => {
+            const ref = /*[[${data.ref}]]*/ "";
+            document.getElementById(
+                "header-route"
+            ).innerHTML = `<p>Events / ${ref} / <span class="active">Overview</span></p>`;
+        });
+    </script>
+    <script th:inline="javascript">
+        const handleClick = () =>
+            modal.destructive(
+                "Are you sure you want to delete this event?",
+                "This process can not be undone!",
+                handleDelete
+            );
+
+        document.addEventListener("DOMContentLoaded", () => {
+            document.getElementById("delete-icon").innerHTML = deleteIcon;
+            document.getElementById("modify-icon").innerHTML = modifyIcon;
+
+            const currentDate = new Date();
+            const oldDate = new Date(/*[[${data.createdAt}]]*/);
+
+            currentDate.setHours(0, 0, 0, 0);
+            oldDate.setHours(0, 0, 0, 0);
+            const timeDifference = currentDate.getTime() - oldDate.getTime();
+            const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+            document.getElementById("createdAt").innerText =
+                days > 0 ? `${days} days ago` : "today";
+        });
+    </script>
+</head>
+
+<body>
+    <main layout:fragment="content">
+        <div class="main-title">
+            <h1>Overview</h1>
+        </div>
+        <div class="form-card">
+            <div class="form-header">
+                <p class="text-muted text-sm">
+                    Created: <span id="createdAt"></span>
+                </p>
+            </div>
+            <div class="form-body">
+                <div>
+                    <p>Name: <span th:text="${data.name}" /></p>
+                </div>
+                <div>
+                    <p>Description: <span th:text="${data.description}" /></p>
+                </div>
+                <div>
+                    <p>Priority: <span th:text="${data.priority}" /></p>
+                </div>
+                <div>
+                    <p>Date: <span th:text="${data.date}" /></p>
+                </div>
+            </div>
+            <div class="form-footer">
+                <button id="delete" type="button" onclick="handleClick()"
+                    th:action="@{/calendar/} + ${data.id} + '/delete'" class="button button-destructive form-button">
+                    <div id="delete-icon" class="icon-wrapper"></div>
+                    <p>Delete Product</p>
+                </button>
+            </div>
+        </div>
+    </main>
+</body>
+
+</html>
